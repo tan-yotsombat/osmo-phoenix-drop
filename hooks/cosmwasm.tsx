@@ -53,7 +53,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
       setLoading(false)
     } catch (error) {
-      setError(error)
+      setError(null)
     }
   }
 
