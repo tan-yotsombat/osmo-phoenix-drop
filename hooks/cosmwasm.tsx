@@ -51,7 +51,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
             const address330 = (await offlineSignerColumbus.getAccounts())[0].address;
             setWalletAddress330(address330)
           } catch (suggestError) {
-            console.log('xx');
             setWalletAddress330('')
           }
         }
@@ -67,11 +66,13 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
         // get user address
 
         setLoading(false)
+        setError(null)
       }
 
     } catch (error) {
       console.log('Something went wrong', error);
-      setError('Something went wrong');
+      setError('Something went wrong. Try reconnecting the wallet again!');
+      setLoading(false)
     }
   }
 
