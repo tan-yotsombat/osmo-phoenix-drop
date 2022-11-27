@@ -43,13 +43,18 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
         try {
           //try to connect to columbus
           await window.keplr.enable(chains[Chain.columbus].chainId)
-        } catch (error) {
+        } catch (EnableError) {
           //if failed, try to suggest chain 
-          await suggestChain(chains[Chain.columbus]);
+          try {
+            await suggestChain(chains[Chain.columbus]);
+            const offlineSignerColumbus = await window.getOfflineSigner(chains[Chain.columbus].chainId)
+            const address330 = (await offlineSignerColumbus.getAccounts())[0].address;
+            setWalletAddress330(address330)
+          } catch (suggestError) {
+            console.log('xx');
+            setWalletAddress330('')
+          }
         }
-        const offlineSignerColumbus = await window.getOfflineSigner(chains[Chain.columbus].chainId)
-        const address330 = (await offlineSignerColumbus.getAccounts())[0].address;
-        setWalletAddress330(address330)
         
 
         // make client

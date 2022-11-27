@@ -5,7 +5,7 @@ export function convertFromMicroDenom(denom: string) {
 }
 
 export function convertToTerraAddress(address: string) {
-  if (!address) return '';
+  if (!address) return 'Failed to get wallet address from Terra Classic (columbus-5)';
   const {data} = fromBech32(address); 
   return toBech32('terra', data);
 }
