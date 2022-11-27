@@ -8,7 +8,7 @@ let CosmWasmContext: any
 let { Provider } = (CosmWasmContext =
   createContext<ISigningCosmWasmClientContext>({
     walletAddress: '',
-    signingClient: null,
+    //signingClient: null,
     loading: false,
     error: null,
     connectWallet: () => {},

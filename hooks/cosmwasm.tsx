@@ -1,74 +1,88 @@
 import { useState } from 'react'
-import { connectKeplr } from 'services/keplr'
-import { GasPrice } from '@cosmjs/stargate'
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import chains, { Chain } from 'chain';
+import { suggestChain } from 'services/keplr';
+
+declare let window: Window;
 
 export interface ISigningCosmWasmClientContext {
   walletAddress: string
-  signingClient: SigningCosmWasmClient | null
+  walletAddress330: string
+  //signingClient: SigningCosmWasmClient | null
   loading: boolean
   error: any
   connectWallet: any
   disconnect: Function
 }
 
-const PUBLIC_RPC_ENDPOINT = process.env.NEXT_PUBLIC_CHAIN_RPC_ENDPOINT || ''
-const PUBLIC_CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
-const GAS_PRICE = process.env.NEXT_PUBLIC_GAS_PRICE as string
-
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [walletAddress, setWalletAddress] = useState('')
-  const [signingClient, setSigningClient] =
-    useState<SigningCosmWasmClient | null>(null)
+  const [walletAddress330, setWalletAddress330] = useState('')
+  //const [signingClient, setSigningClient] =
+    //useState<SigningCosmWasmClient | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   const connectWallet = async () => {
-    setLoading(true)
 
     try {
-      await connectKeplr()
+      if (!window.getOfflineSigner || !window.keplr) {
+        alert('Please install keplr extension')
+      } else {
+        
+        setLoading(true)
+        console.log('Wallet connected!');
 
-      // enable website to access kepler
-      await (window as any).keplr.enable(PUBLIC_CHAIN_ID)
+        // enable website to access kepler
+        // get osmosis address
+        await window.keplr.enable(chains[Chain.osmosis].chainId)
+        const offlineSigner = await window.getOfflineSigner(chains[Chain.osmosis].chainId)
+        const [{ address }] = await offlineSigner.getAccounts()
+        setWalletAddress(address)
 
-      // get offline signer for signing txs
-      const offlineSigner = await (window as any).getOfflineSigner(
-        PUBLIC_CHAIN_ID
-      )
-
-      // make client
-      const client = await SigningCosmWasmClient.connectWithSigner(
-        PUBLIC_RPC_ENDPOINT,
-        offlineSigner,
-        {
-          gasPrice: GasPrice.fromString(GAS_PRICE),
+        try {
+          //try to connect to columbus
+          await window.keplr.enable(chains[Chain.columbus].chainId)
+        } catch (error) {
+          //if failed, try to suggest chain 
+          await suggestChain(chains[Chain.columbus]);
         }
-      )
-      setSigningClient(client)
+        const offlineSignerColumbus = await window.getOfflineSigner(chains[Chain.columbus].chainId)
+        const address330 = (await offlineSignerColumbus.getAccounts())[0].address;
+        setWalletAddress330(address330)
+        
 
-      // get user address
-      const [{ address }] = await offlineSigner.getAccounts()
-      setWalletAddress(address)
+        // make client
+        /*const client = await SigningCosmWasmClient.connectWithSigner(
+          PUBLIC_RPC_ENDPOINT,
+          offlineSigner,
+        )
+        setSigningClient(client)*/
 
-      setLoading(false)
+        // get user address
+
+        setLoading(false)
+      }
+
     } catch (error) {
-      setError(null)
+      console.log('Something went wrong', error);
+      setError('Something went wrong');
     }
   }
 
   const disconnect = () => {
-    if (signingClient) {
+    /*if (signingClient) {
       signingClient.disconnect()
-    }
+    }*/
     setWalletAddress('')
-    setSigningClient(null)
+    //setSigningClient(null)
     setLoading(false)
   }
 
   return {
     walletAddress,
-    signingClient,
+    walletAddress330,
+    //signingClient,
     loading,
     error,
     connectWallet,
