@@ -3,11 +3,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ThemeToggle from 'components/ThemeToggle'
 import { useEffect } from 'react'
+import { Chain } from 'chain'
+import { getOsmoAddress } from 'util/conversion'
 
 function Nav() {
-  const { walletAddress, connectWallet, disconnect } = useSigningClient()
+  const { wallets, connectWallet, disconnect } = useSigningClient()
   const handleConnect = () => {
-    if (walletAddress.length === 0) {
+    if (wallets.length === 0) {
       connectWallet()
     } else {
       disconnect()
@@ -53,7 +55,7 @@ function Nav() {
             className="block btn btn-outline btn-primary w-full max-w-full truncate"
             onClick={handleConnect}
           >
-            {walletAddress || 'Connect Wallet'}
+            {getOsmoAddress(wallets) || 'Connect Wallet'}
           </button>
         </div>
       </nav>

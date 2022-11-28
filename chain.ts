@@ -12,7 +12,7 @@ export enum Chain {
   osmosis, columbus, phoenix118
 }
 
-const chains: Record<Chain, IChainConfig> = {
+export const chainConfigs: Record<Chain, IChainConfig> = {
   [Chain.osmosis]: {
     chainId: 'osmosis-1',
     chainName: 'Osmosis',
@@ -42,7 +42,3 @@ const chains: Record<Chain, IChainConfig> = {
     denom: 'uluna'
   },
 }
-
-
-
-export default chains;

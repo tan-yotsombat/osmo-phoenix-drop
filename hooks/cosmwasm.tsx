@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
-import chains, { Chain } from 'chain';
-import { suggestChain } from 'services/keplr';
+import { Chain, chainConfigs, IChainConfig } from 'chain';
+import { Window as KeplrWindow, Key } from '@keplr-wallet/types'
+import { convertFromMicroDenom } from 'util/conversion';
 
-declare let window: Window;
+declare global {
+  interface Window extends KeplrWindow {}
+}
+
+export interface IWalletInfo extends Key, IChainConfig { }
 
 export interface ISigningCosmWasmClientContext {
-  walletAddress: string
-  walletAddress330: string
-  //signingClient: SigningCosmWasmClient | null
+  wallets: IWalletInfo[],
   loading: boolean
   error: any
   connectWallet: any
@@ -16,55 +18,48 @@ export interface ISigningCosmWasmClientContext {
 }
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
-  const [walletAddress, setWalletAddress] = useState('')
-  const [walletAddress330, setWalletAddress330] = useState('')
-  //const [signingClient, setSigningClient] =
-    //useState<SigningCosmWasmClient | null>(null)
+  const [wallets, setWallets] = useState<IWalletInfo[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const connectWallet = async () => {
-
     try {
-      if (!window.getOfflineSigner || !window.keplr) {
+      if (!window.keplr /*|| !window.getOfflineSigner*/) {
         alert('Please install keplr extension')
       } else {
         
         setLoading(true)
         console.log('Wallet connected!');
-
-        // enable website to access kepler
-        // get osmosis address
-        await window.keplr.enable(chains[Chain.osmosis].chainId)
-        const offlineSigner = await window.getOfflineSigner(chains[Chain.osmosis].chainId)
-        const [{ address }] = await offlineSigner.getAccounts()
-        setWalletAddress(address)
-
-        try {
-          //try to connect to columbus
-          await window.keplr.enable(chains[Chain.columbus].chainId)
-        } catch (EnableError) {
-          //if failed, try to suggest chain 
+        
+        let connectedWallets = [];
+        for (const chain of [Chain.osmosis, Chain.columbus]) {
+          const chainConfig = chainConfigs[chain]
+          
           try {
-            await suggestChain(chains[Chain.columbus]);
-            const offlineSignerColumbus = await window.getOfflineSigner(chains[Chain.columbus].chainId)
-            const address330 = (await offlineSignerColumbus.getAccounts())[0].address;
-            setWalletAddress330(address330)
-          } catch (suggestError) {
-            setWalletAddress330('')
+            //try to connect the chain if added already
+            await window.keplr.enable(chainConfig.chainId)
+            const key = await window.keplr.getKey(chainConfig.chainId);
+
+            connectedWallets.push({...key, ...chainConfig})
+          } catch (enableError: any) {
+
+            //if failed to connect, check if user rejected or keplr has no chain info
+            if(enableError?.message.includes('rejected')) {
+              //do nothing user rejected to connect to this chain
+              console.log(`Failed to connect ${chainConfig.chainName}. User rejected.`)
+            } else {
+              //try to suggest chain
+              try {
+                await suggestChain(chainConfig);
+                const key = await window.keplr.getKey(chainConfig.chainId);
+                connectedWallets.push({...key, ...chainConfig})
+              } catch (suggestError) {
+                console.log(`Failed to suggest ${chainConfig.chainName}. User rejected.`)
+              }
+            }
           }
         }
-        
-
-        // make client
-        /*const client = await SigningCosmWasmClient.connectWithSigner(
-          PUBLIC_RPC_ENDPOINT,
-          offlineSigner,
-        )
-        setSigningClient(client)*/
-
-        // get user address
-
+        setWallets(connectedWallets);
         setLoading(false)
         setError(null)
       }
@@ -77,18 +72,55 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   }
 
   const disconnect = () => {
-    /*if (signingClient) {
-      signingClient.disconnect()
-    }*/
-    setWalletAddress('')
-    //setSigningClient(null)
+    setWallets([])
     setLoading(false)
+  }
+  
+  const suggestChain = async (config: IChainConfig) => {
+    if (window.keplr && window.keplr.experimentalSuggestChain) {
+      const currency = { 
+        coinDenom: convertFromMicroDenom(config.denom), 
+        coinMinimalDenom: config.denom, 
+        coinDecimals: 6, 
+        //coinGeckoId: "cosmos", 
+      };
+
+      try {
+        await window.keplr.experimentalSuggestChain({
+          chainId: config.chainId,
+          chainName: config.chainName,
+          rpc: config.rpcEndpoint,
+          rest: config.lcdEndpoint,
+          bip44: {
+            coinType: config.coinType,
+          },
+          bech32Config: {
+            bech32PrefixAccAddr: config.prefix,
+            bech32PrefixAccPub: config.prefix + "pub",
+            bech32PrefixValAddr: config.prefix + "valoper",
+            bech32PrefixValPub: config.prefix + "valoperpub",
+            bech32PrefixConsAddr: config.prefix + "valcons",
+            bech32PrefixConsPub: config.prefix + "valconspub",
+          },
+          currencies: [ currency ],
+          feeCurrencies: [{
+              ...currency,
+              //gasPriceStep: {
+                //low: 0.01,
+                //average: 0.025,
+                //high: 0.04,
+              //},
+          }],
+          stakeCurrency: currency,
+        })
+      } catch { }
+    } else {
+      alert('Please use the recent version of keplr extension')
+    }
   }
 
   return {
-    walletAddress,
-    walletAddress330,
-    //signingClient,
+    wallets,
     loading,
     error,
     connectWallet,

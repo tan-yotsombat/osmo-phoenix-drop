@@ -10,7 +10,7 @@ function WalletLoader({
   loading?: boolean
 }) {
   const {
-    walletAddress,
+    wallets,
     loading: clientLoading,
     error,
     connectWallet,
@@ -24,7 +24,7 @@ function WalletLoader({
     )
   }
 
-  if (walletAddress === '') {
+  if (wallets.length === 0) {
     return (
       <div className="max-w-full">
         <h1 className="text-6xl font-bold">
