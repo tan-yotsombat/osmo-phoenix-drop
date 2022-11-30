@@ -1,9 +1,7 @@
 import { useSigningClient } from 'contexts/cosmwasm'
 import Link from 'next/link'
-import Image from 'next/image'
 import ThemeToggle from 'components/ThemeToggle'
 import { useEffect } from 'react'
-import { Chain } from 'chain'
 import { getOsmoAddress } from 'util/conversion'
 
 function Nav() {
@@ -34,7 +32,7 @@ function Nav() {
           </Link>
         </div>
         <ThemeToggle />
-        <div className="flex flex-grow lg:flex-grow-0 max-w-full">
+        <div className="flex flex-grow lg:flex-grow-0 max-w-full w-64 sm:w-max">
           <button
             className="block btn btn-outline btn-primary w-full max-w-full truncate"
             onClick={handleConnect}
