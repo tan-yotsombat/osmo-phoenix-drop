@@ -87,7 +87,7 @@ function TerraWallet({
       vestingDisplay = (<>
         <p>Total Vesting Airdrop: {sum} LUNA </p>
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-        <table className="mt-2 table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <table className="mt-2 table-auto w-full text-sm text-left">
         <thead>
           <tr>
             <th>#</th>

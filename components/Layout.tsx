@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <footer className="flex items-center justify-center w-full h-24 border-t">
-        Considered this to be useful? Donate me :D
+        Considered this to be useful? Buy me some coffee :D
       </footer>
     </div>
   )
