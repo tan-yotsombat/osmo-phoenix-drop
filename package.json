@@ -12,6 +12,7 @@
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.28.4",
     "@keplr-wallet/types": "^0.11.17",
+    "axios": "^1.2.0",
     "daisyui": "^2.42.1",
     "next": "12.1.6",
     "react": "18.1.0",

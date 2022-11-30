@@ -1,5 +1,13 @@
-import { fromBech32, toBech32 } from '@cosmjs/encoding';
+import { toBech32 } from '@cosmjs/encoding';
 import { IWalletInfo } from 'hooks/cosmwasm';
+
+export function convertMicroDenomToDenom(amount: number | string) {
+  if (typeof amount === 'string') {
+    amount = Number(amount)
+  }
+  amount = amount / 1000000
+  return isNaN(amount) ? 0 : amount
+}
 
 export function convertFromMicroDenom(denom: string) {
   return denom?.substring(1).toUpperCase()

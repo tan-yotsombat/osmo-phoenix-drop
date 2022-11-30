@@ -2,31 +2,31 @@ import type { NextPage } from 'next'
 import WalletLoader from 'components/WalletLoader'
 import { useSigningClient } from 'contexts/cosmwasm'
 import { getOsmoAddress, getTerraAddress } from 'util/conversion'
+import Image from 'next/image'
+import TerraWallet from 'components/TerraWallet'
 
 const Home: NextPage = () => {
   const { wallets } = useSigningClient()
 
   return (
     <WalletLoader>
-      <h1 className="text-6xl font-bold">
-        Hi!
-      </h1>
-
       <div className="mt-3 text-2xl">
-        Your Osmosis wallet address is:{' '}
-        <pre className="font-mono break-all whitespace-pre-wrap">
+        Your Osmosis wallet address is:
+        <pre className="break-all whitespace-pre-wrap">
           {getOsmoAddress(wallets)}
         </pre>
       </div>
+      
+      <div>
+        <Image src="/arrows-down-icon.svg" alt="arrow" width={64} height={64} />
+      </div>
 
-      <div className='container'>
-        <div className="columns-2 text-xl font-bold">
-          <div><h3>Coin Type 118 - Keplr/Osmo</h3></div>
-          <div><h3>Coin Type 330 - Terra Station</h3></div>
+      <div className='grid grid-cols-2 gap-4'>
+        <div>
+          <TerraWallet header='Coin Type 118 - Keplr/Osmo' terraAddress={getTerraAddress(wallets, 118)} addNetworkButton={true}/>
         </div>
-        <div className="columns-2 text-lg">
-          <div>{getTerraAddress(wallets, 118)}</div>
-          <div>{getTerraAddress(wallets, 330)}</div>
+        <div>
+          <TerraWallet header='Coin Type 330 - Terra Station' terraAddress={getTerraAddress(wallets, 330)}/>
         </div>
       </div>
     </WalletLoader>

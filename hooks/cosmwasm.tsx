@@ -17,6 +17,49 @@ export interface ISigningCosmWasmClientContext {
   disconnect: Function
 }
 
+export const suggestChain = async (config: IChainConfig) => {
+  if (window.keplr && window.keplr.experimentalSuggestChain) {
+    const currency = { 
+      coinDenom: convertFromMicroDenom(config.denom), 
+      coinMinimalDenom: config.denom, 
+      coinDecimals: 6, 
+      //coinGeckoId: "cosmos", 
+    };
+
+    try {
+      await window.keplr.experimentalSuggestChain({
+        chainId: config.chainId,
+        chainName: config.chainName,
+        rpc: config.rpcEndpoint,
+        rest: config.lcdEndpoint,
+        bip44: {
+          coinType: config.coinType,
+        },
+        bech32Config: {
+          bech32PrefixAccAddr: config.prefix,
+          bech32PrefixAccPub: config.prefix + "pub",
+          bech32PrefixValAddr: config.prefix + "valoper",
+          bech32PrefixValPub: config.prefix + "valoperpub",
+          bech32PrefixConsAddr: config.prefix + "valcons",
+          bech32PrefixConsPub: config.prefix + "valconspub",
+        },
+        currencies: [ currency ],
+        feeCurrencies: [{
+            ...currency,
+            //gasPriceStep: {
+              //low: 0.01,
+              //average: 0.025,
+              //high: 0.04,
+            //},
+        }],
+        stakeCurrency: currency,
+      })
+    } catch { }
+  } else {
+    alert('Please use the recent version of keplr extension')
+  }
+}
+
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [wallets, setWallets] = useState<IWalletInfo[]>([])
   const [loading, setLoading] = useState(false)
@@ -74,49 +117,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const disconnect = () => {
     setWallets([])
     setLoading(false)
-  }
-  
-  const suggestChain = async (config: IChainConfig) => {
-    if (window.keplr && window.keplr.experimentalSuggestChain) {
-      const currency = { 
-        coinDenom: convertFromMicroDenom(config.denom), 
-        coinMinimalDenom: config.denom, 
-        coinDecimals: 6, 
-        //coinGeckoId: "cosmos", 
-      };
-
-      try {
-        await window.keplr.experimentalSuggestChain({
-          chainId: config.chainId,
-          chainName: config.chainName,
-          rpc: config.rpcEndpoint,
-          rest: config.lcdEndpoint,
-          bip44: {
-            coinType: config.coinType,
-          },
-          bech32Config: {
-            bech32PrefixAccAddr: config.prefix,
-            bech32PrefixAccPub: config.prefix + "pub",
-            bech32PrefixValAddr: config.prefix + "valoper",
-            bech32PrefixValPub: config.prefix + "valoperpub",
-            bech32PrefixConsAddr: config.prefix + "valcons",
-            bech32PrefixConsPub: config.prefix + "valconspub",
-          },
-          currencies: [ currency ],
-          feeCurrencies: [{
-              ...currency,
-              //gasPriceStep: {
-                //low: 0.01,
-                //average: 0.025,
-                //high: 0.04,
-              //},
-          }],
-          stakeCurrency: currency,
-        })
-      } catch { }
-    } else {
-      alert('Please use the recent version of keplr extension')
-    }
   }
 
   return {
