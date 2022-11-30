@@ -28,10 +28,10 @@ function WalletLoader({
     return (
       <div className="max-w-full">
         <h1 className="text-4xl font-bold">
-          Did you know, LUNAtics? 
+          Did you know, #LUNAtics? 
         </h1>
         <p className="mt-3 text-2xl md:max-w-4xl">
-          If you provided liquidity on OSMO/LUNC or OSMO/USTC pool during Terra Collapse, you might get LUNA 2.0 airdrop to 2 Terra accounts.
+          If you provided liquidity on OSMO/LUNC or OSMO/USTC pool before Terra collapsed, you might get LUNA 2.0 airdrop to 2 Terra accounts.
         </p>
 
         <p className="mt-6 text-xl">

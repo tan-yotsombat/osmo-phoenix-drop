@@ -120,7 +120,7 @@ function TerraWallet({
 
   return (<>
     <h1 className="text-lg font-bold">{header}</h1>
-    <p className="break-all whitespace-pre-wrap">{terraAddress}</p>
+    <pre className="break-all whitespace-pre-wrap">{terraAddress}</pre>
     <div className="mt-2">
       {balanceDisplay}
       {vestingDisplay}
