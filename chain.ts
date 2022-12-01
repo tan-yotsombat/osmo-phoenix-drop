@@ -9,7 +9,7 @@ export interface IChainConfig {
 }
 
 export enum Chain {
-  osmosis, columbus, phoenix118
+  osmosis, columbus, phoenix
 }
 
 export const chainConfigs: Record<Chain, IChainConfig> = {
@@ -31,11 +31,11 @@ export const chainConfigs: Record<Chain, IChainConfig> = {
     rpcEndpoint: 'https://rpc-columbus.keplr.app',
     lcdEndpoint: 'https://lcd-columbus.keplr.app',
     denom: 'ulunc'
-  },
-  [Chain.phoenix118]: {
+  },  
+  [Chain.phoenix]: {
     chainId: 'phoenix-1',
-    chainName: 'Terra 2.0 (Cointype 118)',
-    coinType: 118,
+    chainName: 'Terra 2.0',
+    coinType: 330,
     prefix: 'terra',
     rpcEndpoint: 'https://terra-rpc.polkachu.com',
     lcdEndpoint: 'https://phoenix-lcd.terra.dev',

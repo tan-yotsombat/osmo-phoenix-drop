@@ -3,9 +3,8 @@ import Loader from './Loader'
 import axios from "axios";
 import { Chain, chainConfigs } from 'chain';
 import { convertMicroDenomToDenom } from 'util/conversion';
-import { suggestChain } from 'hooks/cosmwasm';
 
-const api = chainConfigs[Chain.phoenix118].lcdEndpoint;
+const api = chainConfigs[Chain.phoenix].lcdEndpoint;
 
 interface ITerraBalances {
   balance: number,
@@ -16,11 +15,9 @@ interface ITerraBalances {
 function TerraWallet({
   header,
   terraAddress,
-  addNetworkButton = false,
 }: {
   header: string,
   terraAddress: string,
-  addNetworkButton?: boolean,
 }) {
   const [balances, setBalances] = useState<ITerraBalances>();
   
@@ -114,10 +111,6 @@ function TerraWallet({
     }
   }
 
-  const asyncSuggestChain = async () => {
-    suggestChain(chainConfigs[Chain.phoenix118])
-  }
-
   return (<>
     <h1 className="text-lg font-bold">{header}</h1>
     <pre className="break-all whitespace-pre-wrap">{terraAddress}</pre>
@@ -125,14 +118,6 @@ function TerraWallet({
       {balanceDisplay}
       {vestingDisplay}
     </div>
-    { addNetworkButton &&
-      <button className="p-2 mt-4 text-center border border-secondary hover:border-primary rounded-xl hover:text-primary focus:text-primary-focus"
-        onClick={ asyncSuggestChain }>
-        <p className="text-lg">
-          Add chain to Keplr
-        </p>
-      </button> 
-    }
   </>);
 }
 
