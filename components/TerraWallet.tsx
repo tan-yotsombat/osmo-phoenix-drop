@@ -76,7 +76,7 @@ function TerraWallet({
             const amount = convertMicroDenomToDenom(vestingPeriod.amount[0].amount);
             vesting.push([
               count + ')', 
-              start.toISOString().split('T')[0] + 'to' + end.toISOString().split('T')[0], 
+              start.toISOString().split('T')[0] + ' to ' + end.toISOString().split('T')[0], 
               amount.toString()
             ]);
 

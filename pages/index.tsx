@@ -21,26 +21,26 @@ const Home: NextPage = () => {
       <p>Which can be derived into 2 Terra addresses based on
         <a className="px-1 link link-primary link-hover" href="https://medium.com/chainapsis/keplr-explained-coin-type-118-9781d26b2c4e">Coin Type</a>
       </p>
-      
-      <div className="hidden sm:block">
-        <Image src="/arrows-down-icon.svg" alt="arrow" width={64} height={64} />
-      </div>
 
-      <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16'>
-        <div>
-          <TerraWallet header='1. Coin Type 118 - Keplr/Osmo' terraAddress={getTerraAddress(wallets, 118)}/>
+
+      <div className='mt-6 grid grid-cols-1  gap-8 sm:grid-cols-5 sm:gap-0'>
+        <div className='col-span-2'>
+          <TerraWallet header='1. Coin Type 118 - Keplr/Osmo' terraAddress={getTerraAddress(wallets, 118)} />
         </div>
-        <div>
-          <TerraWallet header='2. Coin Type 330 - Terra Station' terraAddress={getTerraAddress(wallets, 330)}/>
+        <div className="hidden sm:block col-span-1">
+          <Image src="/arrows-down-icon.svg" alt="arrow" width={64} height={64} />
+        </div>
+        <div className='col-span-2'>
+          <TerraWallet header='2. Coin Type 330 - Terra Station' terraAddress={getTerraAddress(wallets, 330)} />
         </div>
       </div>
       <button className="p-4 mt-8 text-center border border-secondary hover:border-primary rounded-xl hover:text-primary focus:text-primary-focus"
-        onClick={ asyncSuggestPhoenix }>
+        onClick={asyncSuggestPhoenix}>
         <p className="text-md sm:text-lg">
           Add Terra 2.0 to Keplr
         </p>
       </button>
-      <p className="text-sm mt-2">If nothing happens, you might added Terra 2.0 to Keplr already! You can remove and add the chain again, Keplr will ask you to select either 118 or 330 account.</p>
+      <p className="text-sm mt-2">If nothing happens, you might added Terra 2.0 to Keplr already! You can remove and add the chain again, Keplr will ask you to select either 118 or 330 account. It is recommended to use type 118, since you can you Terra Station Wallet for type 330.</p>
     </WalletLoader>
   )
 }
