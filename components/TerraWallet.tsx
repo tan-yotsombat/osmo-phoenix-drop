@@ -20,7 +20,7 @@ function TerraWallet({
   terraAddress: string,
 }) {
   const [balances, setBalances] = useState<ITerraBalances>();
-  
+
   useEffect(() => {
     async function fetchData() {
       const balancePromise = axios.get(api + '/cosmos/bank/v1beta1/spendable_balances/' + terraAddress)
@@ -46,23 +46,23 @@ function TerraWallet({
     if (!terraAddress.startsWith("Ledger")) {
       fetchData();
     } else {
-      setBalances({ 
+      setBalances({
         balance: 0,
       })
     }
-  }, []);
+  }, [terraAddress]);
 
   let balanceDisplay;
   let vestingDisplay;
   if (!balances) {
-    balanceDisplay =  <div className="flex justify-center">
+    balanceDisplay = <div className="flex justify-center">
       <Loader />
     </div>
   } else {
     balanceDisplay = <><p>Balance: {convertMicroDenomToDenom(balances.balance)} LUNA</p></>;
 
     if (balances.vestingPeriods && balances.vestingPeriods.length > 0) {
-      
+
       let lastLength = 1;
       let count = 1;
       let sum = 0;
@@ -74,7 +74,11 @@ function TerraWallet({
             const start = new Date(1000 * (Number(balances.vestingStart) + lastLength));
             const end = new Date(1000 * (Number(balances.vestingStart) + Number(vestingPeriod.length)));
             const amount = convertMicroDenomToDenom(vestingPeriod.amount[0].amount);
-            vesting.push([count, start, end, amount]);
+            vesting.push([
+              count + ')', 
+              start.toISOString().split('T')[0] + 'to' + end.toISOString().split('T')[0], 
+              amount.toString()
+            ]);
 
             sum += amount;
             count++;
@@ -83,27 +87,26 @@ function TerraWallet({
         });
       vestingDisplay = (<>
         <p>Total Vesting Airdrop: {sum} LUNA </p>
-        <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-        <table className="mt-2 table-auto w-full text-sm text-left">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount (LUNA)</th>
-          </tr>
-        </thead>
-        <tbody>
-        {
-          vesting.map(([count, start, end, amount]) => { return <><tr>
-            <td>{count}</td>
-            <td>{start.toISOString().split('T')[0]}</td>
-            <td>{end.toISOString().split('T')[0]}</td>
-            <td>{amount}</td>
-          </tr></> })
-        }
-        </tbody>
-        </table>
+        <div className="mt-2 overflow-x-auto relative shadow-md sm:rounded-lg w-96 sm:w-full">
+          <table className="w-full text-sm text-left">
+            <thead className="text-xs uppercase bg-base-200 dark:bg-base-200">
+              <tr>
+                <th className="py-3 px-6">#</th>
+                <th className="py-3 px-6">Vesting Period</th>
+                <th className="py-3 px-6">Amount (LUNA)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                vesting.map(rowData => {
+                  return <><tr className="bg-base-100 border-b dark:bg-base-100">
+                    {(rowData as string[]).map(colData => <><td className="py-2 px-6  whitespace-nowrap">{colData}</td></>)}
+                    
+                  </tr></>
+                })
+              }
+            </tbody>
+          </table>
         </div>
       </>);
     } else {
@@ -112,10 +115,12 @@ function TerraWallet({
   }
 
   return (<>
-    <h1 className="text-lg font-bold">{header}</h1>
-    <pre className="break-all whitespace-pre-wrap">{terraAddress}</pre>
-    <div className="mt-2">
+    <h1 className="text-lg font-bold text-left sm:text-center">{header}</h1>
+    <pre className="text-left break-all whitespace-pre-wrap text-sm sm:text-lg sm:text-center">{terraAddress}</pre>
+    <div className="mt-2 text-left">
       {balanceDisplay}
+    </div>
+    <div className="mt-2 text-left">
       {vestingDisplay}
     </div>
   </>);
