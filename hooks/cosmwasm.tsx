@@ -46,11 +46,11 @@ export const suggestChain = async (config: IChainConfig) => {
         currencies: [ currency ],
         feeCurrencies: [{
             ...currency,
-            //gasPriceStep: {
-              //low: 0.01,
-              //average: 0.025,
-              //high: 0.04,
-            //},
+            gasPriceStep: {
+              low: 0.015,
+              average: 0.025,
+              high: 0.04,
+            },
         }],
         stakeCurrency: currency,
       })

@@ -87,20 +87,20 @@ function TerraWallet({
         });
       vestingDisplay = (<>
         <p>Total Vesting Airdrop: {sum} LUNA </p>
-        <div className="mt-2 overflow-x-auto relative shadow-md sm:rounded-lg w-96 sm:w-full">
+        <div className="mt-2 overflow-x-auto relative shadow-md sm:rounded-lg sm:w-full">
           <table className="w-full text-sm text-left">
             <thead className="text-xs uppercase bg-base-200 dark:bg-base-200">
               <tr>
-                <th className="py-3 px-6">#</th>
-                <th className="py-3 px-6">Vesting Period</th>
-                <th className="py-3 px-6">Amount (LUNA)</th>
+                <th className="py-3 px-2 sm:px-6">#</th>
+                <th className="py-3 px-2 sm:px-6">Vesting Period</th>
+                <th className="py-3 px-2 sm:px-6">Amount (LUNA)</th>
               </tr>
             </thead>
             <tbody>
               {
                 vesting.map(rowData => {
                   return <><tr className="bg-base-100 border-b dark:bg-base-100">
-                    {(rowData as string[]).map(colData => <><td className="py-2 px-6  whitespace-nowrap">{colData}</td></>)}
+                    {(rowData as string[]).map(colData => <><td className="py-2 px-2 sm:px-6 whitespace-nowrap">{colData}</td></>)}
                     
                   </tr></>
                 })
