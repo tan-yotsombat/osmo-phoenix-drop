@@ -23,7 +23,7 @@ export const suggestChain = async (config: IChainConfig) => {
       coinDenom: convertFromMicroDenom(config.denom), 
       coinMinimalDenom: config.denom, 
       coinDecimals: 6, 
-      //coinGeckoId: "cosmos", 
+      coinGeckoId: "terra-luna-2", 
     };
 
     try {

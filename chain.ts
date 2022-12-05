@@ -34,10 +34,10 @@ export const chainConfigs: Record<Chain, IChainConfig> = {
   },  
   [Chain.phoenix]: {
     chainId: 'phoenix-1',
-    chainName: 'Terra 2.0',
+    chainName: 'Terra Phoenix',
     coinType: 330,
     prefix: 'terra',
-    rpcEndpoint: 'https://terra-rpc.polkachu.com',
+    rpcEndpoint: 'https://terra-rpc.lavenderfive.com',
     lcdEndpoint: 'https://phoenix-lcd.terra.dev',
     denom: 'uluna'
   },

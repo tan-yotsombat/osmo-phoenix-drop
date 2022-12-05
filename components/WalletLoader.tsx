@@ -27,26 +27,26 @@ function WalletLoader({
   if (wallets.length === 0) {
     return (
       <div className="max-w-full">
-        <h1 className="text-4xl font-bold">
-          Did you know, #LUNAtics? 
+        <h1 className="mt-4 text-2xl sm:text-4xl font-bold">
+          Did you know, #LUNAtics?
         </h1>
-        <p className="mt-3 text-2xl md:max-w-4xl">
+        <p className="mt-3 text-xl sm:text-2xl md:max-w-4xl">
           If you provided liquidity on OSMO/LUNC or OSMO/USTC pool before Terra collapsed, you might get LUNA 2.0 airdrop to 2 Terra accounts.
         </p>
 
-        <p className="mt-6 text-xl">
+        <p className="mt-6 text-lg sm:text-xl">
           Connect your
           <a className="pl-1 link link-primary link-hover" href="https://keplr.app/">Keplr wallet </a>
           and check now.
         </p>
 
-        <div className="flex flex-wrap items-center justify-around mt-2 sm:w-full">
+        <div className="flex flex-wrap items-center justify-around mt-2 mx-4 sm:w-full">
           <button
-            className="p-6 mt-6 text-left border border-secondary hover:border-primary w-96 rounded-xl hover:text-primary focus:text-primary-focus"
+            className="p-4 px-6 sm:p-6 mt-6 text-left border border-secondary hover:border-primary w-96 rounded-xl hover:text-primary focus:text-primary-focus"
             onClick={connectWallet}
           >
-            <h3 className="text-2xl font-bold">Connect your wallet &rarr;</h3>
-            <p className="mt-4 text-xl">
+            <h3 className="text-xl sm:text-2xl font-bold">Connect your wallet &rarr;</h3>
+            <p className="mt-2 sm:mt-4 text-md sm:text-xl">
               Get your Keplr wallet connected now
             </p>
           </button>

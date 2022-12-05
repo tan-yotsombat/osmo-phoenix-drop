@@ -22,17 +22,17 @@ function Nav() {
   }, [connectWallet]);
 
   return (
-    <div className="border-b w-screen px-2 md:px-16">
-      <nav className="flex flex-wrap text-center md:text-left md:flex flex-row w-full justify-between items-center py-4 ">
+    <div className="border-b w-screen px-2 sm:px-16">
+      <nav className="flex flex-wrap text-center sm:text-left sm:flex flex-row w-full justify-between items-center py-4 ">
         <div className="flex items-center">
           <Link href="/">
-            <a className="ml-1 md:ml-2 link link-hover font-semibold text-xl md:text-2xl align-top">
+            <a className="ml-1 sm:ml-2 link link-hover font-semibold text-xl sm:text-2xl align-top">
               OSMO Phoenix drop checker
             </a>
           </Link>
         </div>
         <ThemeToggle />
-        <div className="flex flex-grow lg:flex-grow-0 max-w-full w-64 sm:w-max">
+        <div className="flex flex-shrink max-w-[70%] sm:w-max">
           <button
             className="block btn btn-outline btn-primary w-full max-w-full truncate"
             onClick={handleConnect}
